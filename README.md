@@ -1,10 +1,10 @@
 # iems-chatbot-ui-plugin
 
-npm install: 
+npm install:  
 
     npm install iems-chatbot-ui-plugin  
 
-install:
+import module:  
 
     import { createApp } from 'vue';
     import MyPlugin from 'iems-chatbot-ui-plugin';
@@ -12,9 +12,11 @@ install:
     const app = createApp(App);
     app.use(MyPlugin);
 
-Use:
+Use:  
 
     <chatbotui></chatbotui>
+
+Note:  
 
 在Vue 3应用中使用TypeScript引入自定义插件时，有时会出现找不到声明文件的问题。  
 使用插件的Vue 3项目中添加声明文件： 确保你的Vue 3项目中也有一个声明文件（.d.ts）来引用你的插件  
@@ -51,4 +53,58 @@ prop 包含 `config`, `api`, `msg` 三個屬性
         title: 'title', // Dialog title
         helloworld: String,
         list: Array String
+    }
+
+# UI  
+
+## chatbotui  
+
+使用時，需鑲入 `div` 元件中
+
+![chatbot UI](./readmeImg/chatbotUI.png)
+
+
+## drag-ctrl-chat-dialog  
+
+含開關按鈕的彈窗  
+
+![drag-ctrl-chat-dialog](./readmeImg/dialogUI_01.png)  
+
+![drag-ctrl-chat-dialog](./readmeImg/dialogUI_02.png)  
+
+# api  
+
+## chat (/iEMS/chatbot)  
+
+chat api 格式如下：  
+
+Media type:  
+
+    application/json  
+
+requset body:  
+
+    {
+        "messages": [
+            {
+            "role": "user",
+            "content": "Is there any abnormal electric consumption on 8/31?"
+            }
+        ],
+        "params": {
+            "resourceId": "984"
+        }
+    }
+
+	
+Response body:  
+
+    {
+        "isError": false,
+        "messages": [
+            {
+            "content": "[Expert Data]The energy consumption is normal on 2023-08-31",
+            "metadata": {}
+            }
+        ]
     }
