@@ -223,6 +223,7 @@ export default {
     border-image-source: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
     border-image-slice: 30;
     overflow:hidden;
+    box-shadow: 0px 4px 20px 0px #00000080;
   }
   .fixDialogInner{
     background:#FFF;
