@@ -7,12 +7,14 @@
       <div>ChatBot</div>
     </div>
     <div class="fixDialog" v-show="showChatbot">
-      <div class="fixDialogTitleArea">
-        <span>{{ dialogTitle }}</span>
-        <span class="fixDialogClose" @click="closeDone">&times;</span>
-      </div>
-      <div class="fixDialogContentArea">
-        <chatbotui :api="api" :msg="msg"></chatbotui>
+      <div class="fixDialogInner">
+        <div class="fixDialogTitleArea">
+          <span class="fixDialogTitle">{{ dialogTitle }}</span>
+          <span class="fixDialogClose" @click="closeDone">&times;</span>
+        </div>
+        <div class="fixDialogContentArea">
+          <chatbotui :api="api" :msg="msg"></chatbotui>
+        </div>
       </div>
     </div>
   </div>
@@ -214,19 +216,24 @@ export default {
     box-sizing: border-box;
     flex-direction:column;
     z-index: 500;
+    border: 1px solid transparent;
     border-radius: 8px;
-    border: 1px solid;
-    border-image-source: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
-    box-shadow: 0px 4px 20px 0px #00000080;
     background: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg),
     linear-gradient(0deg, #FFFFFF, #FFFFFF);
-    overflow: hidden;
+    border-image-source: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
+    border-image-slice: 30;
+    overflow:hidden;
+  }
+  .fixDialogInner{
+    background:#FFF;
+    width:100%;
+    height:100%;
   }
   .fixDialogTitleArea{
     position: relative;
     width: 100%;
     height: 50px;
-    background: linear-gradient(0deg, #E1E1E1, #E1E1E1),linear-gradient(0deg, #FFFFFF, #FFFFFF);
+    background: #FFFFFF;
     display: flex;
     box-sizing: border-box;
     flex-direction:row;
@@ -234,6 +241,12 @@ export default {
     align-items: center;
     padding: 5px 10px;
     border-bottom: 1px solid #E1E1E1;
+  }
+  .fixDialogTitle{
+    font-family: Roboto;
+    font-weight: 700;
+    line-height: 24px;
+    font-size: 18px;
   }
   .fixDialogContentArea{
     position: relative;
