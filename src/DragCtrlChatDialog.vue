@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div ref="buttonElement" class="draggable" v-show="!showChatbot">
-      <div class="qrcodeArea">
-        <div id="qrcode"></div>
-      </div>
-      <div>ChatBot</div>
-    </div>
+    <div ref="buttonElement" class="draggable" v-show="!showChatbot" ></div>
     <div class="fixDialog" v-show="showChatbot">
       <div class="fixDialogInner">
         <div class="fixDialogTitleArea">
@@ -43,8 +38,8 @@ export default {
       chatbotWidth: 300,
       dialogTitle: dialogTitle,
       btnPosition: {
-        x: '5px',
-        y: '5px'
+        x: '0px',
+        y: '0px'
       }
     };
   },
@@ -114,13 +109,13 @@ export default {
       var minDistance = Math.min(leftDistance, rightDistance, topDistance, bottomDistance);
 
       if (minDistance === leftDistance) {
-        button.style.left = '5px';
+        button.style.left = '0px';
       } else if (minDistance === rightDistance) {
-        button.style.left = (maxX - 5) + 'px';
+        button.style.left = maxX + 'px';
       } else if (minDistance === topDistance) {
-        button.style.top = '5px';
+        button.style.top = '0px';
       } else {
-        button.style.top = (maxY - 5) + 'px';
+        button.style.top = maxY + 'px';
       }
     },
     onMouseDown(e) {
@@ -194,34 +189,16 @@ export default {
   .draggable {
     bottom: 5px;
     right: 5px;
-    width: 96px;
-    height: 96px;
-    background-color: #007bff;
-    border-radius: 50%;
+    width: 136px;
+    height: 136px;
     position: fixed;
-    cursor: pointer;
-    /* user-drag: none; */
-    touch-action: none;
-    background: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: #FFFFFF;
-    font-family: Roboto;
-    font-weight: 700;
-    border: 4px solid #FFFFFF;
-    box-shadow: 0px 2px 8px 0px #32323380;
-    z-index: 1000;
+    background-image: url(./assets/start.png);
   }
 
-  /* Styles for the QR code area within the draggable button */
-  .qrcodeArea {
-    position: relative;
-    width: 50px;
-    height: 50px;
-    box-sizing: border-box;
+  .dark .draggable {
+    background-image: url(./assets/startdark.png);
   }
+
   .fixDialog{
     position: fixed;
     bottom: 10px;
@@ -259,11 +236,19 @@ export default {
     padding: 5px 10px;
     border-bottom: 1px solid #E1E1E1;
   }
+
+  .dark .fixDialogTitleArea{
+    background: black;
+  }
   .fixDialogTitle{
     font-family: Roboto;
     font-weight: 700;
     line-height: 24px;
     font-size: 18px;
+  }
+
+  .dark .fixDialogTitle{
+    color: white
   }
   .fixDialogContentArea{
     position: relative;
