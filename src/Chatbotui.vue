@@ -3,7 +3,7 @@
     <div class="chatContain">
       <div class="aiBotBox">
         <div class="boxContent">
-          <div class="aiBotLogoArea"><img class="aiBotLogo" src="./assets/Angulara.png" /></div>
+          <div class="aiBotLogoArea"><img class="aiBotLogo" src="./assets/Icon.png" /></div>
             <div class="chatArea">
               <span class="contentSpan">
                 <span>{{ helloworld }}</span>
@@ -17,7 +17,7 @@
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="{ aiBotBox: message.type === 'bot', selfBox: message.type === 'user' }">
         <div class="boxContent">
-          <div class="aiBotLogoArea" v-if="message.type === 'bot'"><img class="aiBotLogo" src="./assets/Angulara.png" /></div>
+          <div class="aiBotLogoArea" v-if="message.type === 'bot'"><img class="aiBotLogo" src="./assets/Icon.png" /></div>
           <div class="chatArea">
             <span class="contentSpan">
               <span>{{ message.content }}</span>
@@ -41,7 +41,7 @@
       </div>
     </div>
 </template>
-  
+
 <script>
 import chatbotAPI from './api/chatbot'
 export default {
@@ -235,13 +235,16 @@ export default {
       bottom: 0px;
       width: 100%;
       height: 56px;
-      padding: 12px 16px;
       box-sizing: border-box;
       border-top: 1px solid #C8C8C8;
       display: flex;
       justify-content: center;
       align-items: center;
       background-color: #ffffff;
+  }
+
+  .dark .chatInputArea{
+      background-color: black;
   }
   .chatContain {
       position: absolute;
@@ -251,6 +254,10 @@ export default {
       overflow-x: hidden;
       height: calc(100% - 56px);
       width: 100%;
+  }
+
+  .dark .chatContain {
+      background-color: black;
   }
   .chatBox{
       margin: 5px;
@@ -283,13 +290,20 @@ export default {
       display: inline-block;
       border-bottom-right-radius: 20px;
       border-bottom-left-radius: 20px;
-      padding: 8px 12px;
+      padding: 10px 12px;
       text-align: left;
   }
   .selfBox .chatArea .contentSpan{
-      background-color: #C6E6F9;
+      background-color: #4679E1;
       border-top-left-radius: 20px;
+      color: white;
   }
+
+  .dark .selfBox .chatArea .contentSpan{
+      background-color: #3EA0FF;
+      color: black;
+  }
+
   .aiBotBox {
       position: relative;
       display: flex;
@@ -305,22 +319,44 @@ export default {
       background-color: #EDEDED;
       border-top-right-radius: 20px;
   }
+
+  .dark .aiBotBox .chatArea .contentSpan{
+      background-color: #3E3E40;
+      color:#FFFFFF;
+  }
   .aiBotBox .chatArea ul{
       list-style: none;
       padding: 0px;
   }
   .aiBotBox .chatArea li{
       margin-top: 5px;
-      border: 1px solid #2A9ED7;
-      color: #2A9ED7;
+      border: 1px solid #4679E1;
+      color: #4679E1;
+      font-weight: bold;
+      border-radius: 10px;
       background-color: #FFFFFF;
       box-sizing: border-box;
-      padding: 0px 5px;
+      padding: 5px 5px;
       text-align: left;
+  }
+
+  .dark .aiBotBox .chatArea li{
+      border: 1px solid #3EA0FF;
+      color: #3EA0FF;
+      background-color: black;
   }
   .aiBotBox .chatArea li:hover{
       color: #FFFFFF;
-      background-color: #2A9ED7;
+      background-color: #4679E1;
+  }
+
+  .dark .aiBotBox .chatArea li:hover{
+      background-color: #3EA0FF;
+  }
+
+  .dark .aiBotBox .chatArea li:hover{
+      color: #FFFFFF;
+      background-color: #4679E1;
   }
   .aiBotLogoArea{
       position: relative;
@@ -337,7 +373,7 @@ export default {
   .chatName{
       display: flex;
       background-color: #C6E6F9;
-      color: #2A9ED7;
+      color: #4679E1;
       border-radius: 50px;
       width: 24px;
       height: 24px;
@@ -364,6 +400,10 @@ export default {
       height: 24px;
       background-repeat: no-repeat;
   }
+
+  .dark .chatNext {
+      background-image: url(./assets/normalnextdark.svg);
+  }
   .chatMic{
       background-color: transparent;
       border: 0;
@@ -373,5 +413,9 @@ export default {
       width: 24px;
       height: 24px;
       background-repeat: no-repeat;
+  }
+
+  .dark .chatMic{
+      background-image: url(./assets/normalmicdark.svg);
   }
 </style>
