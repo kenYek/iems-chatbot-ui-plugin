@@ -48,6 +48,22 @@ export default {
       }
     };
   },
+  watch:{
+    config: {
+      handler: function (newVal) {
+        console.log('watch config d:', newVal)
+      },
+      deep: true
+    },
+    msg: {
+      handler: function (newVal) {
+        if (newVal && newVal.title) {
+          this.dialogTitle = newVal.title;
+        }
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.makeCode();
     // this.updateUrlParameter('uuid', this.genUniqueId());
