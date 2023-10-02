@@ -13,7 +13,7 @@
           <span class="fixDialogClose" @click="closeDone">&times;</span>
         </div>
         <div class="fixDialogContentArea">
-          <chatbotui :api="api" :msg="msg"></chatbotui>
+          <chatbotui :api="api" :msg="msg" :config="config"></chatbotui>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@ export default {
     Chatbotui,
   },
   props: {
-    user: { type: Object },
+    config: { type: Object },
     api: { type: Object },
     msg: {
       type: Object

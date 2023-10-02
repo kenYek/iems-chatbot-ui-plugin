@@ -106,19 +106,23 @@ export default {
     this.startTime = this.getCurrentTime();
   },
   watch:{
-    config (newVal)  {
-      if (newVal && newVal.name) {
-        this.username = newVal.name;
-      }
-      if (typeof(newVal.showName) === 'boolean') {
-        this.showName = newVal.showName;
-      }
-      if (typeof(newVal.mic)!== 'undefined') {
-        this.showMic = newVal.mic;
-      }
-      if (newVal.inputDefaultStr) {
-        this.placeholder = newVal.inputDefaultStr;
-      }
+    config: {
+      function(newVal) {
+        console.log('watch config c:', newVal)
+        if (newVal && newVal.name) {
+          this.username = newVal.name;
+        }
+        if (newVal && typeof(newVal.showName) === 'boolean') {
+          this.showName = newVal.showName;
+        }
+        if (newVal && typeof(newVal.mic)!== 'undefined') {
+          this.showMic = newVal.mic;
+        }
+        if (newVal && newVal.inputDefaultStr) {
+          this.placeholder = newVal.inputDefaultStr;
+        }
+      },
+      deep: true
     },
     api () {
 
