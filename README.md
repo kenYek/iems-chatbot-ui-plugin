@@ -26,16 +26,18 @@ Note:
 
 # Vue Prop:  
 
-prop 包含 `config`, `api`, `msg` 三個屬性  
+prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
     
-    <chatbotui :api="api" :msg="msg" :config="config"></chatbotui>
-    <drag-ctrl-chat-dialog :api="api" :msg="msg"></drag-ctrl-chat-dialog>
+    <chatbotui :api="api" :msg="msg" :config="config" class="dark"></chatbotui>
+    <drag-ctrl-chat-dialog :api="api" :msg="msg" class="dark"></drag-ctrl-chat-dialog>
 
     config: {
         name: String,
         showName: Boolean,
         mic: Boolean,
-        inputDefaultStr: String
+        inputDefaultStr: String,
+	addBtn: Boolean,  // dialog header add button
+        menuBtn: Boolean  // dialog header menu button
     }
 
     api: {
@@ -50,7 +52,8 @@ prop 包含 `config`, `api`, `msg` 三個屬性
     }
 
     msg: {
-        title: 'title', // Dialog title
+        title: 'title', // Dialog header title
+	subtitle: String, // Dialog header subtitle
         helloworld: String,
         list: Array String
     }
