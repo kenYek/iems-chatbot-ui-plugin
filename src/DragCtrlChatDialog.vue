@@ -4,8 +4,15 @@
     <div class="fixDialog" v-show="showChatbot">
       <div class="fixDialogInner">
         <div class="fixDialogTitleArea">
-          <span class="fixDialogTitle">{{ dialogTitle }}</span>
-          <span class="fixDialogClose" @click="closeDone">&times;</span>
+          <div class="title">
+            <span class="fixDialogTitle">{{ dialogTitle }}</span>
+            <span class="fixDialogSubTitle">{{ dialogSubTitle }}</span>
+          </div>
+          <div class="titleBtn">
+            <span class="addBtn" v-show="showAdd"></span>
+            <span class="menuBtn" v-show="showMenu"></span>
+            <span class="closeBtn" @click="closeDone"></span>
+          </div>
         </div>
         <div class="fixDialogContentArea">
           <chatbotui :api="api" :msg="msg" :config="config"></chatbotui>
@@ -30,13 +37,31 @@ export default {
   },
   data() {
     let dialogTitle = '智能AI專家';
+    let dialogSubTitle = 'New message';
+    let showAdd = true;
+    let showMenu = true;
     if (this.msg && this.msg.title) {
       dialogTitle = this.msg.title;
     }
+    if (this.msg && this.msg.subtitle) {
+      dialogSubTitle = this.msg.subtitle;
+    }
+
+    if (this.config) {
+      if (typeof(this.config.addBtn)!== 'undefined') {
+        showAdd = this.config.addBtn;
+      }
+      if (typeof(this.config.menuBtn)!== 'undefined') {
+        showMenu = this.config.menuBtn;
+      }
+    }
     return {
+      showAdd: showAdd,
+      showMenu: showMenu,
       showChatbot: false,
       chatbotWidth: 300,
       dialogTitle: dialogTitle,
+      dialogSubTitle: dialogSubTitle,
       btnPosition: {
         x: '0px',
         y: '0px'
@@ -47,6 +72,12 @@ export default {
     config: {
       handler: function (newVal) {
         console.log('watch config d:', newVal)
+        if (newVal && typeof(newVal.addBtn)!== 'undefined') {
+          this.showAdd = newVal.addBtn;
+        }
+        if (newVal && typeof(newVal.menuBtn)!== 'undefined') {
+          this.showMenu = newVal.menuBtn;
+        }
       },
       deep: true
     },
@@ -54,6 +85,9 @@ export default {
       handler: function (newVal) {
         if (newVal && newVal.title) {
           this.dialogTitle = newVal.title;
+        }
+        if (newVal && newVal.title) {
+          this.dialogSubTitle = newVal.subtitle;
         }
       },
       deep: true
@@ -231,7 +265,6 @@ export default {
     display: flex;
     box-sizing: border-box;
     flex-direction:row;
-    justify-content: space-between;
     align-items: center;
     padding: 5px 10px;
     border-bottom: 1px solid #E1E1E1;
@@ -240,11 +273,21 @@ export default {
   .dark .fixDialogTitleArea{
     background: black;
   }
+
   .fixDialogTitle{
     font-family: Roboto;
-    font-weight: 700;
-    line-height: 24px;
-    font-size: 18px;
+    font-weight: bold;
+    font-size: 16px;
+    display:block;
+  }
+
+  .fixDialogSubTitle{
+    font-family: Roboto;
+    font-size: 1px;
+    color: #a3a1a1;
+    display:block;
+    line-height:4px;
+    margin-top: 4px;
   }
 
   .dark .fixDialogTitle{
@@ -256,18 +299,43 @@ export default {
     height: calc(100% - 50px);
     background-color: #FFFFFF;
   }
-  .fixDialogClose {
-    color: #C8C8C8;
-    cursor: pointer;
-    font-size: 24px;
-    font-weight: bold;
-    transition: color 0.3s ease;
+
+  .titleBtn {
+    right: 8px;
+    display: flex;
+    position: absolute;
   }
 
-  .fixDialogClose:hover,
-  .fixDialogClose:focus {
-    color: #2A9ED7;
-    text-decoration: none;
+  .addBtn {
+    background-image: url(./assets/add.svg);
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+  }
+
+  .dark .addBtn {
+    background-image: url(./assets/addDark.svg);
+  }
+
+  .menuBtn {
+    background-image: url(./assets/menu.svg);
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+  }
+
+  .dark .menuBtn {
+    background-image: url(./assets/menudark.svg);
+  }
+
+  .closeBtn {
+    background-image: url(./assets/close.svg);
+    width: 24px;
+    height: 24px;
+  }
+
+  .dark .closeBtn {
+    background-image: url(./assets/closedark.svg);
   }
 </style>
 

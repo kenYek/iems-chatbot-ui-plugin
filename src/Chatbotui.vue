@@ -354,10 +354,6 @@ export default {
       background-color: #3EA0FF;
   }
 
-  .dark .aiBotBox .chatArea li:hover{
-      color: #FFFFFF;
-      background-color: #4679E1;
-  }
   .aiBotLogoArea{
       position: relative;
       width: 50px;
@@ -383,12 +379,21 @@ export default {
   }
   .chatInputDiv{
       width: calc(100% - 100px);
+      margin-right: 12px;
   }
   .chatInput{
       background-color: transparent;
       border: 0;
       width: 100%;
       height: 24px;
+      outline: none;
+      font-size: 16px;
+      caret-color: #4679E1;
+      color: white;
+  }
+
+  .dark .chatInput{
+    caret-color: #3EA0FF;
   }
   .chatNext {
       background-color: transparent;
@@ -408,7 +413,7 @@ export default {
       background-color: transparent;
       border: 0;
       padding: 0;
-      margin: 0;
+      margin-right: 4px;
       background-image: url(./assets/normalmic.svg);
       width: 24px;
       height: 24px;
