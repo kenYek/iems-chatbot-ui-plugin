@@ -19,7 +19,16 @@
         <div class="boxContent">
           <div class="aiBotLogoArea" v-if="message.type === 'bot'"><img class="aiBotLogo" src="./assets/Icon.svg" /></div>
           <div class="chatArea">
-            <span class="contentSpan">
+            <span class="contentSpanWithHelp" v-if="showHelpBlock && message.type === 'bot' && message.error === false" >
+              <span class="contentSpan">{{ message.content }}</span>
+              <div class="helpArea">
+                <button class="blueplay"></button>
+                <span> Was this helpful?</span>
+                <button class="resBtn">Yes</button>
+                <button class="resBtn">No</button>
+              </div>
+            </span>
+            <span class="contentSpan" v-else>
               <span>{{ message.content }}</span>
             </span>
           </div>
@@ -64,6 +73,7 @@ export default {
     let username = 'Guest';
     let showMic = true;
     let showName = true;
+    let showHelpBlock = true;
     if (this.msg) {
       if (this.msg.helloworld) {
         helloworld = this.msg.helloworld;
@@ -85,10 +95,14 @@ export default {
       if (this.config.inputDefaultStr) {
         placeholder = this.config.inputDefaultStr;
       }
+      if (typeof(this.config.showHelpBlock) === 'boolean') {
+        showHelpBlock = this.config.showHelpBlock;
+      }
     }
     return {
       placeholder: placeholder,
       showName: showName,
+      showHelpBlock: showHelpBlock,
       showMic: showMic,
       username: username,
       startTime: "",
@@ -120,6 +134,9 @@ export default {
         }
         if (newVal && newVal.inputDefaultStr) {
           this.placeholder = newVal.inputDefaultStr;
+        }
+        if (newVal && typeof(newVal.showHelpBlock) === 'boolean') {
+          this.showHelpBlock = newVal.showHelpBlock;
         }
       },
       deep: true
@@ -163,10 +180,11 @@ export default {
       this.message = askMsg
       this.sendMessage()
     },
-    addMessage(message, type) {
+    addMessage(message, type, err) {
       const msg = {}
       msg.content = message
       msg.type = type
+      msg.error = err
       msg.timestamp = this.getCurrentTime()
       this.messages.push(msg)
     },
@@ -209,13 +227,13 @@ export default {
         }
         if (resp.data != null && resp.data.isError === false && Array.isArray(resp.data.messages)) {
           for (let i = 0; i < resp.data.messages.length; i++) {
-            this.addMessage(resp.data.messages[i].content, "bot")
+            this.addMessage(resp.data.messages[i].content, "bot", false)
           }
         } else {
-          this.addMessage("Error fetching response", "bot")
+          this.addMessage("Error fetching response", "bot", true)
         }
       } catch (error) {
-        this.addMessage("Connection error", "bot")
+        this.addMessage("Connection error", "bot", true)
       }
     }
   },
@@ -324,6 +342,62 @@ export default {
       background-color: #3E3E40;
       color:#FFFFFF;
   }
+
+  .contentSpanWithHelp{
+    display: inline-block;
+    padding: 10px 12px;
+    text-align: left;
+  }
+
+  .aiBotBox .chatArea .contentSpanWithHelp .contentSpan{
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    width:100%;
+  }
+  .helpArea {
+    background-color: #E1E1E1;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 10px 12px;
+    width:100%;
+    display: flex;
+    align-items: center;
+    color: #89898A;
+    font-size: 13px;
+  }
+
+  .dark .helpArea {
+    background-color: #7D7D7D;
+    color: #c0c0c0;
+  }
+
+  .blueplay{
+      background-color: transparent;
+      border: 0;
+      background-image: url(./assets/blueplay.svg);
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+  }
+
+  .dark .blueplay{
+      background-image: url(./assets/blueplaydark.svg);
+  }
+
+  .resBtn{
+    color:#4679E1;
+    border: 0;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0;
+    margin-left: 8px;
+  }
+
+  .dark .resBtn {
+    color:#3EA0FF;
+  }
+
   .aiBotBox .chatArea ul{
       list-style: none;
       padding: 0px;
