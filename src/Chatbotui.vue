@@ -3,7 +3,7 @@
     <div class="chatContain">
       <div class="aiBotBox">
         <div class="boxContent">
-          <div class="aiBotLogoArea"><img class="aiBotLogo" src="./assets/Icon.png" /></div>
+          <div class="aiBotLogoArea"><img class="aiBotLogo" src="./assets/Icon.svg" /></div>
             <div class="chatArea">
               <span class="contentSpan">
                 <span>{{ helloworld }}</span>
@@ -17,7 +17,7 @@
       </div>
       <div v-for="(message, index) in messages" :key="index" :class="{ aiBotBox: message.type === 'bot', selfBox: message.type === 'user' }">
         <div class="boxContent">
-          <div class="aiBotLogoArea" v-if="message.type === 'bot'"><img class="aiBotLogo" src="./assets/Icon.png" /></div>
+          <div class="aiBotLogoArea" v-if="message.type === 'bot'"><img class="aiBotLogo" src="./assets/Icon.svg" /></div>
           <div class="chatArea">
             <span class="contentSpan">
               <span>{{ message.content }}</span>
@@ -365,6 +365,7 @@ export default {
       width: 40px;
       height: 40px;
       border-radius: 50px;
+      background: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
   }
   .chatName{
       display: flex;
