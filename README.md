@@ -36,7 +36,7 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
         showName: Boolean,
         mic: Boolean,
         inputDefaultStr: String,
-	addBtn: Boolean,  // dialog header add button
+        addBtn: Boolean,  // dialog header add button
         menuBtn: Boolean  // dialog header menu button
     }
 
@@ -53,7 +53,7 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
 
     msg: {
         title: 'title', // Dialog header title
-	subtitle: String, // Dialog header subtitle
+        subtitle: String, // Dialog header subtitle
         helloworld: String,
         list: Array String
     }
@@ -65,6 +65,7 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
 使用時，需鑲入 `div` 元件中
 
 ![chatbot UI](./readmeImg/chatbotUI.png)
+![chatbot UI dark](./readmeImg/chatbotUI_dark.png)
 
 
 ## drag-ctrl-chat-dialog  
@@ -72,8 +73,10 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
 含開關按鈕的彈窗  
 
 ![drag-ctrl-chat-dialog](./readmeImg/dialogUI_01.png)  
+![drag-ctrl-chat-dialog](./readmeImg/dialogUI_02.png)
 
-![drag-ctrl-chat-dialog](./readmeImg/dialogUI_02.png)  
+![drag-ctrl-chat-dialog](./readmeImg/dialogUI_01_dark.png)  
+![drag-ctrl-chat-dialog](./readmeImg/dialogUI_02_dark.png)
 
 # api  
 
