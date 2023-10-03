@@ -390,11 +390,12 @@ export default {
       outline: none;
       font-size: 16px;
       caret-color: #4679E1;
-      color: white;
+      color: black;
   }
 
   .dark .chatInput{
     caret-color: #3EA0FF;
+    color: white;
   }
   .chatNext {
       background-color: transparent;
