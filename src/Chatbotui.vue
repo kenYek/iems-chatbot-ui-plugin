@@ -130,7 +130,7 @@ export default {
   },
   watch:{
     config: {
-      function(newVal) {
+      handler: function(newVal) {
         console.log('watch config c:', newVal)
         if (newVal && newVal.name) {
           this.username = newVal.name;
@@ -156,13 +156,16 @@ export default {
     api () {
 
     },
-    msg (newVal) {
-      if (newVal && newVal.helloworld) {
-        this.helloworld = newVal.helloworld;
-      }
-      if (newVal && Array.isArray(newVal.list)) {
-        this.defaultMessage = newVal.list;
-      }
+    msg: {
+      handler: function(newVal) {
+        if (newVal && newVal.helloworld) {
+          this.helloworld = newVal.helloworld;
+        }
+        if (newVal && Array.isArray(newVal.list)) {
+          this.defaultMessage = newVal.list;
+        }
+      },
+      deep: true
     }
   },
   methods: {
