@@ -37,8 +37,10 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
         mic: Boolean,
         inputDefaultStr: String,
         addBtn: Boolean,  // dialog header add button
-        menuBtn: Boolean  // dialog header menu button
-        showHelpBlock: Boolean  // aibot response is helpful or not
+        menuBtn: Boolean,  // dialog header menu button
+        showHelpBlock: Boolean,  // aibot response is helpful or not
+        helpString: String, // Was this helpful?
+        helpChoice: Array String, // ['Yes', 'No']
     }
 
     api: {

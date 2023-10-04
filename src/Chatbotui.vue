@@ -23,9 +23,8 @@
               <span class="contentSpan">{{ message.content }}</span>
               <div class="helpArea">
                 <button class="blueplay"></button>
-                <span> Was this helpful?</span>
-                <button class="resBtn">Yes</button>
-                <button class="resBtn">No</button>
+                <span> {{ helpString }}</span>
+                <button v-for="(btn, idx) in defaultHelpChoice" :key="idx" class="resBtn">{{ btn }}</button>
               </div>
             </span>
             <span class="contentSpan" v-else>
@@ -69,11 +68,13 @@ export default {
         "請問哪台配備負載量最高?",
         "時間電價區間為何?",
     ];
+    let defaultHelpChoice = ["Yes", "No"]
     let placeholder = '請輸入訊息';
     let username = 'Guest';
     let showMic = true;
     let showName = true;
     let showHelpBlock = true;
+    let helpString = 'Was this helpful?';
     if (this.msg) {
       if (this.msg.helloworld) {
         helloworld = this.msg.helloworld;
@@ -95,12 +96,19 @@ export default {
       if (this.config.inputDefaultStr) {
         placeholder = this.config.inputDefaultStr;
       }
+      if (this.config.helpString) {
+        helpString = this.config.helpString;
+      }
       if (typeof(this.config.showHelpBlock) === 'boolean') {
         showHelpBlock = this.config.showHelpBlock;
+      }
+      if (Array.isArray(this.config.helpChoice)) {
+        defaultHelpChoice = this.config.helpChoice;
       }
     }
     return {
       placeholder: placeholder,
+      helpString: helpString,
       showName: showName,
       showHelpBlock: showHelpBlock,
       showMic: showMic,
@@ -110,6 +118,7 @@ export default {
       message: "",
       helloworld: helloworld,
       defaultMessage: defaultMessageList,
+      defaultHelpChoice: defaultHelpChoice,
       defaultApi: {
         root: '',
         chat: { path: '/iEMS/chatbot', method: 'POST' }
@@ -134,6 +143,9 @@ export default {
         }
         if (newVal && newVal.inputDefaultStr) {
           this.placeholder = newVal.inputDefaultStr;
+        }
+        if (newVal && newVal.helpString) {
+          this.helpString = newVal.helpString;
         }
         if (newVal && typeof(newVal.showHelpBlock) === 'boolean') {
           this.showHelpBlock = newVal.showHelpBlock;
