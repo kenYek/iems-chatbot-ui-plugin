@@ -36,7 +36,7 @@ export default {
     }
   },
   data() {
-    let dialogTitle = '智能AI專家';
+    let dialogTitle = 'Chat with Chatbot';
     let dialogSubTitle = 'New message';
     let showAdd = true;
     let showMenu = true;
@@ -227,6 +227,7 @@ export default {
     height: 136px;
     position: fixed;
     background-image: url(./assets/start.png);
+    cursor: pointer;
   }
 
   .dark .draggable {
@@ -311,6 +312,7 @@ export default {
     width: 24px;
     height: 24px;
     margin-right: 4px;
+    cursor: pointer;
   }
 
   .dark .addBtn {
@@ -322,6 +324,7 @@ export default {
     width: 24px;
     height: 24px;
     margin-right: 4px;
+    cursor: pointer;
   }
 
   .dark .menuBtn {
@@ -332,6 +335,7 @@ export default {
     background-image: url(./assets/close.svg);
     width: 24px;
     height: 24px;
+    cursor: pointer;
   }
 
   .dark .closeBtn {

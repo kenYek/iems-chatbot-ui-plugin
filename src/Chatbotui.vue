@@ -434,6 +434,7 @@ export default {
   .aiBotBox .chatArea li:hover{
       color: #FFFFFF;
       background-color: #4679E1;
+      cursor: pointer;
   }
 
   .dark .aiBotBox .chatArea li:hover{
@@ -492,6 +493,7 @@ export default {
       width: 24px;
       height: 24px;
       background-repeat: no-repeat;
+      cursor: pointer;
   }
 
   .dark .chatNext {
@@ -506,6 +508,7 @@ export default {
       width: 24px;
       height: 24px;
       background-repeat: no-repeat;
+      cursor: pointer;
   }
 
   .dark .chatMic{
