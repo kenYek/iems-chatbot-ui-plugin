@@ -299,20 +299,21 @@ export default {
     display: flex;
     box-sizing: border-box;
     flex-direction:column;
+    justify-content: center;
+    align-items: center;
     z-index: 500;
-    border: 1px solid transparent;
     border-radius: 8px;
     background: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg),
     linear-gradient(0deg, #FFFFFF, #FFFFFF);
-    border-image-source: conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
-    border-image-slice: 30;
     overflow:hidden;
     box-shadow: 0px 4px 20px 0px #00000080;
   }
   .fixDialogInner{
     background:#FFF;
-    width:100%;
-    height:100%;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    border-radius: 8px;
+    overflow: hidden;
   }
   .fixDialogTitleArea{
     position: relative;
