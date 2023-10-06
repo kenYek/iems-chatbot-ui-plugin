@@ -6,14 +6,14 @@
           <span class="fixDialogTitle">{{ dialogHistoryTitle }}</span>
         </div>
         <div class="titleBtn">
-          <span class="addBtn" v-show="showAdd"></span>
+          <span class="addBtn" v-show="showAdd" @click="addNewRoom"></span>
         </div>
       </div>
       <div class="fixDialogContentArea">
         <ul class="historyListUl">
-          <li class="historyListLi">
-            <div class="historyItemTitle">Message</div>
-            <div class="historyItemDate">2023/09/27</div>
+          <li class="historyListLi" v-for="(item, idx) in historyRecords" :key="idx">
+            <div class="historyItemTitle">{{ item.name }}</div>
+            <div class="historyItemDate">{{ item.date }}</div>
             <div class="historyItemOption"></div>
           </li>
         </ul>
@@ -86,7 +86,11 @@ export default {
       btnPosition: {
         x: '0px',
         y: '0px'
-      }
+      },
+      historyRecords: [
+        { name: 'Message1', date: '2023/09/28'},
+        { name: 'Message2', date: '2023/09/28'}
+      ]
     };
   },
   watch:{
@@ -127,6 +131,10 @@ export default {
     },
     showHistory () {
       this.openSide = !this.openSide;
+    },
+    addNewRoom () {
+      const record = { name: 'Message', date: '2023/09/28'};
+      this.historyRecords.push(record);
     }
   }
 }
@@ -195,13 +203,18 @@ export default {
   }
 
   .dark .fixDialogTitle{
-    color: white
+    color: white;
   }
   .fixDialogContentArea{
     position: relative;
     width: 100%;
     height: calc(100% - 50px);
     background-color: #FFFFFF;
+  }
+
+  .dark .fixDialogContentArea{
+    background: black;
+    color: white;
   }
 
   .titleBtn {
@@ -277,6 +290,9 @@ export default {
     text-overflow: ellipsis;
     overflow: hidden;
     padding: 0 5px 0 20px;
+  }
+  .dark .historyItemTitle{
+    color: white;
   }
   .historyItemDate{
     width: 64px;

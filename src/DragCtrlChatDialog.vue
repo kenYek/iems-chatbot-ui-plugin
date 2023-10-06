@@ -255,6 +255,7 @@ export default {
     justify-content: center;
     align-items: center;
   }
+
   .draggableColor{
     position: relative;
     width: 76px;
@@ -288,6 +289,7 @@ export default {
   .dark .draggable {
     /* background-image: url(./assets/startdark.png); */
     background-color: #000000;
+    /* box-shadow: 0px 2px 8px 0px #FFFFFF; */
   }
 
   .fixDialog{

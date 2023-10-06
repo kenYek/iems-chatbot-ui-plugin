@@ -8,7 +8,7 @@ const MyPlugin = {
     app.component('my-component', MyComponent);
     app.component('chatbotui', Chatbotui);
     app.component('drag-ctrl-chat-dialog', DragCtrlChatDialog);
-    // app.component('page-chatbot', PageChatbot);
+    app.component('page-chatbot', PageChatbot);
   },
 };
 
