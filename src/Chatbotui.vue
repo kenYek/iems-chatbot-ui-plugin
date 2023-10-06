@@ -390,8 +390,10 @@ export default {
       background-color: transparent;
       border: 0;
       background-image: url(./assets/blueplay.svg);
-      width: 20px;
-      height: 20px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 24px;
+      height: 24px;
       margin-right: 8px;
   }
 

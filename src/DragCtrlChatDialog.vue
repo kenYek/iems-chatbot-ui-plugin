@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div ref="buttonElement" class="draggable" v-show="!showChatbot" ></div>
+    <div ref="buttonElement" class="draggable" v-show="!showChatbot" >
+      <div class="draggableColor">
+        <div class="draggableIcon"></div>
+        <div class="draggableText">ChatBot</div>
+      </div>
+    </div>
     <div class="fixDialog" v-show="showChatbot">
       <div class="fixDialogInner">
         <div class="fixDialogTitleArea">
@@ -99,6 +104,10 @@ export default {
     const button = this.$refs.buttonElement;
     button.addEventListener('mousedown', this.onMouseDown);
     button.addEventListener('touchstart', this.onTouchStart);
+    window.addEventListener('resize', this.onResize);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.onResize);
   },
   beforeDestroy() {
     // Remove event listeners to prevent memory leaks
@@ -125,8 +134,19 @@ export default {
       button.style.left = this.btnPosition.x;
       button.style.top = this.btnPosition.y;
     },
+    onResize () {
+      this.snapToEdge();
+    },
     makeCode() {},
     snapToEdge() {
+      let shiftX = 24;
+      if (window.matchMedia("(max-width: 1240px)").matches) {
+        shiftX = 16;
+      } else if (window.matchMedia("(max-width: 768px)").matches) {
+        shiftX = 16;
+      } else if (window.matchMedia("(max-width: 500px)").matches) {
+        shiftX = 12;
+      }
       const button = this.$refs.buttonElement;
       var rect = button.getBoundingClientRect();
       var maxX = window.innerWidth - rect.width;
@@ -143,13 +163,13 @@ export default {
       var minDistance = Math.min(leftDistance, rightDistance, topDistance, bottomDistance);
 
       if (minDistance === leftDistance) {
-        button.style.left = '0px';
+        button.style.left = shiftX + 'px';
       } else if (minDistance === rightDistance) {
-        button.style.left = maxX + 'px';
+        button.style.left = (maxX - shiftX) + 'px';
       } else if (minDistance === topDistance) {
-        button.style.top = '0px';
+        button.style.top = shiftX + 'px';
       } else {
-        button.style.top = maxY + 'px';
+        button.style.top = (maxY - shiftX) + 'px';
       }
     },
     onMouseDown(e) {
@@ -223,15 +243,51 @@ export default {
   .draggable {
     bottom: 5px;
     right: 5px;
-    width: 136px;
-    height: 136px;
+    width: 96px;
+    height: 96px;
     position: fixed;
-    background-image: url(./assets/start.png);
+    /* background-image: url(./assets/start.png); */
     cursor: pointer;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    box-shadow: 0px 2px 8px 0px #32323380;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .draggableColor{
+    position: relative;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto;
+    background-image: url(./assets/aiIcon.png),
+    conic-gradient(from 225.67deg at 50% 50%, #FF779B -86.46deg, #A85DE8 1.84deg, #2F79E9 93.43deg, #FFD40F 191.22deg, #FF779B 273.54deg, #A85DE8 361.84deg);
+    background-repeat: no-repeat;
+    background-position: center -5px, center;
+    background-size: contain;
+    border: 0px solid #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .draggableIcon{
+    width: 41px;
+    height: 41px;
+  }
+  .draggableText{
+    color: #FFFFFF;
+    font-family: Roboto;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    height: 20px;
   }
 
   .dark .draggable {
-    background-image: url(./assets/startdark.png);
+    /* background-image: url(./assets/startdark.png); */
+    background-color: #000000;
   }
 
   .fixDialog{
@@ -340,6 +396,42 @@ export default {
 
   .dark .closeBtn {
     background-image: url(./assets/closedark.svg);
+  }
+
+  @media screen and (max-width: 1240px) {
+    .draggable {
+      width: 72px;
+      height: 72px;
+    }
+    .draggableColor{
+      width: 60px;
+      height: 60px;
+      background-position: center, center;
+      background-size: 110%, contain;
+    }
+    .draggableText{
+      display: none;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .draggable {
+      width: 56px;
+      height: 56px;
+    }
+    .draggableColor{
+      width: 44px;
+      height: 44px;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .draggable {
+      width: 48px;
+      height: 48px;
+    }
+    .draggableColor{
+      width: 40px;
+      height: 40px;
+    }
   }
 </style>
 
