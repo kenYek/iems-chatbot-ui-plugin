@@ -1,6 +1,6 @@
 <template>
   <div class="aiBot">
-    <div class="chatContain">
+    <div class="chatContain" :style="{ height: recordMode ? 'calc(100% - 240px)' : 'calc(100% - 56px)' }">
       <div class="aiBotBox">
         <div class="boxContent">
           <div class="aiBotLogoArea"><img class="aiBotLogo" src="./assets/Icon.svg" /></div>
@@ -35,16 +35,36 @@
         </div>
       </div>
     </div>
-    <div class="chatInputArea">
+    <div class="chatInputArea" v-if="!recordMode">
       <div><span class="chatName" v-if="showName">{{ getFirstCharacter(username) }}</span></div>
         <div class="chatInputDiv">
           <input type="text" class="chatInput" :placeholder="placeholder" v-model="message" @keyup.enter="sendMessage"/>
         </div>
         <div>
-          <button class="chatMic" v-show="showMic"></button>
+          <button class="chatMic" v-show="showMic" @click="recordMode=true"></button>
         </div>
         <div>
           <button type="text" class="chatNext" @click="sendMessage"></button>
+        </div>
+      </div>
+      <div class="micInputArea" v-if="recordMode">
+        <div class="micInputAreaTitle">
+          <button class="closeBtn" @click="recordMode=false"></button>
+        </div>
+        <div class="micInputAreaBody">
+          <div class="micText" v-if="!isRecording">Tap the button to start recording</div>
+          <div class="recordTime" v-else> {{ formatTime(recordingTime) }}</div>
+          <div class="micInputAreaButtons">
+            <div class="discardRecord" v-if="!isRecording && audioUrl!=''" @click="discardRecording"></div>
+            <div class="outcircle">
+              <button class="circle" @click="record">
+                <div class="mic" v-if="!isRecording && audioUrl==''"></div>
+                <div class="stopRecord" v-if="isRecording"></div>
+                <div class="playRecord" v-if="!isRecording && audioUrl!=''" @click="playRecording"></div>
+              </button>
+            </div>
+            <button class="sendRecord" v-if="!isRecording && audioUrl!=''"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -72,8 +92,8 @@ export default {
     let placeholder = '請輸入訊息';
     let username = 'Guest';
     let showMic = true;
-    let showName = true;
-    let showHelpBlock = true;
+    let showName = false;
+    let showHelpBlock = false;
     let helpString = 'Was this helpful?';
     if (this.msg) {
       if (this.msg.helloworld) {
@@ -122,7 +142,15 @@ export default {
       defaultApi: {
         root: '',
         chat: { path: '/iEMS/chatbot', method: 'POST' }
-      }
+      },
+      recordMode: false,
+      isMicrophoneReady: false,
+      isRecording: false,
+      mediaRecorder: null,
+      audioChunks: [],
+      audioUrl: '',
+      recordingTime: 0,
+      recordingTimer: null,
     };
   },
   created() {
@@ -250,7 +278,84 @@ export default {
       } catch (error) {
         this.addMessage("Connection error", "bot", true)
       }
-    }
+    },
+    record() {
+      if(this.isRecording) {
+        this.isRecording = false
+      } else {
+        this.isRecording = true
+      }
+      // if(this.isRecording) {
+      //   this.stopRecording()
+      // } else {
+      //   const mic = this.checkMicrophone()
+      //   if(mic && this.isMicrophoneReady) {
+      //     this.startRecording()
+      //   }
+      // }
+    },
+    async checkMicrophone() {
+      try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          this.isMicrophoneReady = true
+          return true;
+      } catch (error) {
+          this.isMicrophoneReady = false
+          console.error('Microphone not accessible:', error);
+          return false;
+      }
+    },
+    startRecording() {
+        this.isRecording = true;
+        this.audioChunks = [];
+        this.recordingTime = 0;
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((stream) => {
+            this.mediaRecorder = new MediaRecorder(stream);
+            this.mediaRecorder.onstop = () => {
+              const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+              this.audioUrl = URL.createObjectURL(audioBlob);
+            };
+            this.mediaRecorder.ondataavailable = this.handleDataAvailable.bind(this);
+            this.mediaRecorder.start();
+            this.recordingTimer = setInterval(() => {
+              this.recordingTime++;
+            }, 1000);
+          })
+          .catch(function (error) {
+          console.error('Error accessing microphone:', error);
+        });
+      },
+      stopRecording() {
+        this.mediaRecorder.stop();
+        this.isRecording = false
+        clearInterval(this.recordingTimer);
+      },
+      playRecording() {
+        if (this.audioUrl) {
+          const audio = new Audio(this.audioUrl);
+          audio.play();
+        }
+      },
+      discardRecording() {
+        this.audioChunks = [];
+        this.audioUrl = '';
+        this.mediaRecorder = null;
+        this.recordingTime = 0;
+      },
+      handleDataAvailable(blob) {
+        this.audioChunks.push(blob.data);
+      },
+      formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+        return `${formattedMinutes}:${formattedSeconds}`;
+      },
   },
 };
 </script>
@@ -279,13 +384,48 @@ export default {
   .dark .chatInputArea{
       background-color: black;
   }
+
+  .micInputArea {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      height: 240px;
+      box-sizing: border-box;
+      border-top: 1px solid #C8C8C8;
+      background-color: #ffffff;
+  }
+
+  .dark .micInputArea {
+      background-color: black;
+  }
+
+  .micInputAreaTitle {
+    width: 100%;
+    height: 48px;
+    border-bottom: 1px solid #C8C8C8;
+    display: flex;
+    align-items: center;
+  }
+
+  .micInputAreaBody {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .micInputAreaButtons {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .chatContain {
       position: absolute;
       box-sizing: border-box;
       padding: 24px 4px;
       overflow-y: auto;
       overflow-x: hidden;
-      height: calc(100% - 56px);
       width: 100%;
   }
 
@@ -519,5 +659,154 @@ export default {
 
   .dark .chatMic{
       background-image: url(./assets/normalmicdark.svg);
+  }
+  .closeBtn {
+    background-image: url(./assets/close.svg);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    position: absolute;
+    right: 8px;
+  }
+
+  .dark .closeBtn {
+    background-image: url(./assets/closedark.svg);
+  }
+
+  .mic {
+    background-image: url(./assets/mic/mic.svg);
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 0;
+    background-repeat: no-repeat;
+  }
+
+  .dark .mic {
+    background-image: url(./assets/mic/micdark.svg);
+  }
+
+  .stopRecord {
+    background-image: url(./assets/mic/stop.svg);
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 0;
+    background-repeat: no-repeat;
+  }
+
+  .dark .stopRecord {
+    background-image: url(./assets/mic/stopdark.svg);
+  }
+
+  .playRecord {
+    background-image: url(./assets/mic/play.svg);
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 0;
+    background-repeat: no-repeat;
+  }
+
+  .circle {
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #4679E1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .dark .circle {
+    border: 1px solid #3EA0FF;
+  }
+
+  .outcircle {
+    background-color: transparent;
+    width: 104px;
+    height: 104px;
+    border: 6px solid #A3BCF0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 32px;
+  }
+
+  .dark .outcircle {
+    border: 6px solid #2D5E8E;
+  }
+  .micText {
+    color:#89898A;
+    font-size: 14px;
+    margin-top:20px;
+    margin-bottom: 16px;
+    height: 20px;
+    width:100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .dark .micText {
+    color:#c0c0c0;
+  }
+
+  .recordTime {
+    color:#4679E1;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top:20px;
+    margin-bottom: 16px;
+    height: 20px;
+    width:100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .dark .recordTime {
+    color:#3EA0FF;
+  }
+
+  .discardRecord {
+    background-color: transparent;
+    border: 1px solid #C8C8C8;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    background-image: url(./assets/mic/delete.svg);
+    width: 44px;
+    height: 44px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: 50% 50%;
+  }
+
+  .dark .discardRecord {
+    background-image: url(./assets/mic/deletedark.svg);
+    border: 1px solid #89898A;
+  }
+  .sendRecord {
+    background-color: transparent;
+    border: 1px solid #C8C8C8;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    background-image: url(./assets/normalnext.svg);
+    width: 44px;
+    height: 44px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: 50% 50%;
+  }
+
+  .dark .sendRecord {
+    background-image: url(./assets/normalnextdark.svg);
+    border: 1px solid #89898A;
   }
 </style>

@@ -43,8 +43,8 @@ export default {
   data() {
     let dialogTitle = 'Chat with Chatbot';
     let dialogSubTitle = 'New message';
-    let showAdd = true;
-    let showMenu = true;
+    let showAdd = false;
+    let showMenu = false;
     if (this.msg && this.msg.title) {
       dialogTitle = this.msg.title;
     }
