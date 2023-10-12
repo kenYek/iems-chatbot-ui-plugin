@@ -41,7 +41,7 @@
           <input type="text" class="chatInput" :placeholder="placeholder" v-model="message" @keyup.enter="sendMessage"/>
         </div>
         <div>
-          <button class="chatMic" v-show="showMic" @click="recordMode=true"></button>
+          <button class="chatMic" v-show="showMic" @click="toggleRecordMode"></button>
         </div>
         <div>
           <button type="text" class="chatNext" @click="sendMessage"></button>
@@ -49,18 +49,19 @@
       </div>
       <div class="micInputArea" v-if="recordMode">
         <div class="micInputAreaTitle">
-          <button class="closeBtn" @click="recordMode=false"></button>
+          <button class="closeBtn" @click="toggleRecordMode"></button>
         </div>
         <div class="micInputAreaBody">
-          <div class="micText" v-if="!isRecording">Tap the button to start recording</div>
-          <div class="recordTime" v-else> {{ formatTime(recordingTime) }}</div>
+          <div class="micText" v-if="!isMicrophoneReady">Microphone is not ready</div>
+          <div class="micText" v-else-if="!isRecording && audioUrl==''">Tap the button to start recording</div>
+          <div class="recordTime" v-else="isRecording || audioUrl!=''"> {{ formatTime(recordingTime) }}</div>
           <div class="micInputAreaButtons">
             <div class="discardRecord" v-if="!isRecording && audioUrl!=''" @click="discardRecording"></div>
             <div class="outcircle">
               <button class="circle" @click="record">
                 <div class="mic" v-if="!isRecording && audioUrl==''"></div>
                 <div class="stopRecord" v-if="isRecording"></div>
-                <div class="playRecord" v-if="!isRecording && audioUrl!=''" @click="playRecording"></div>
+                <div class="playRecord" v-if="!isRecording && audioUrl!=''"></div>
               </button>
             </div>
             <button class="sendRecord" v-if="!isRecording && audioUrl!=''"></button>
@@ -279,20 +280,24 @@ export default {
         this.addMessage("Connection error", "bot", true)
       }
     },
-    record() {
-      if(this.isRecording) {
-        this.isRecording = false
-      } else {
-        this.isRecording = true
+    toggleRecordMode() {
+      this.recordMode = !this.recordMode
+      if(this.recordMode) {
+        this.checkMicrophone()
       }
-      // if(this.isRecording) {
-      //   this.stopRecording()
-      // } else {
-      //   const mic = this.checkMicrophone()
-      //   if(mic && this.isMicrophoneReady) {
-      //     this.startRecording()
-      //   }
-      // }
+    },
+    record() {
+      if(this.isRecording && this.audioUrl == '') {
+        this.stopRecording()
+      } else if(!this.isRecording && this.audioUrl != '') {
+        this.playRecording()
+      } else {
+        if(this.isMicrophoneReady) {
+          this.startRecording()
+        } else {
+          this.checkMicrophone()
+        }
+      }
     },
     async checkMicrophone() {
       try {
