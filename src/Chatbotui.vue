@@ -318,6 +318,7 @@ export default {
   .chatArea {
       box-sizing: border-box;
       color: #323233;
+      width: calc(100%-80px);
   }
   .chatArea .contentSpan{
       display: inline-block;
