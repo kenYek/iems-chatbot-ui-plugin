@@ -43,6 +43,7 @@ export default {
   data() {
     let dialogTitle = 'Chat with Chatbot';
     let dialogSubTitle = 'New message';
+    let showChatbot = true;
     let showAdd = false;
     let showMenu = false;
     if (this.msg && this.msg.title) {
@@ -59,11 +60,14 @@ export default {
       if (typeof(this.config.menuBtn)!== 'undefined') {
         showMenu = this.config.menuBtn;
       }
+      if (typeof(this.config.showChatbot) === 'boolean') {
+        showChatbot = this.config.showChatbot;
+      }
     }
     return {
       showAdd: showAdd,
       showMenu: showMenu,
-      showChatbot: false,
+      showChatbot: showChatbot,
       chatbotWidth: 300,
       dialogTitle: dialogTitle,
       dialogSubTitle: dialogSubTitle,
