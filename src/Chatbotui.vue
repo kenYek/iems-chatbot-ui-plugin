@@ -65,7 +65,7 @@
                 <div class="pauseRecord" v-if="audioplaying"></div>
               </button>
             </div>
-            <button class="sendRecord" v-if="!isRecording && audioUrl!=''"></button>
+            <button class="sendRecord" v-if="!isRecording && audioUrl!=''" @click="sendRecord"></button>
           </div>
         </div>
       </div>
@@ -143,7 +143,8 @@ export default {
       defaultHelpChoice: defaultHelpChoice,
       defaultApi: {
         root: '',
-        chat: { path: '/iEMS/chatbot', method: 'POST' }
+        chat: { path: '/iEMS/chatbot', method: 'POST' },
+        chatrecord: { path: 'iems/chatbot/record'}
       },
       recordMode: false,
       isMicrophoneReady: false,
@@ -280,6 +281,46 @@ export default {
         }
       } catch (error) {
         this.addMessage("Connection error", "bot", true)
+      }
+    },
+    async sendRecord() {
+      if(this.audioUrl && !this.audioplaying) {
+        // merge api.record
+        let mergedReq = this.defaultApi.chatrecord;
+        if (this.api && this.api.chatrecord) {
+          mergedReq = { ...mergedReq, ...this.api.chatrecord };
+        }
+        let mergedRoot = this.defaultApi.root;
+        if (this.api && this.api.root) {
+          mergedRoot = this.api.root;
+        }
+
+        this.addMessage("Voice message", "user");
+
+        const formData = new FormData();
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+        formData.append('audio', audioBlob, 'recording.wav');
+        const reqData = {};
+        if (mergedReq.params) {
+          reqData.params = mergedReq.params;
+        }
+        formData.append('json_data', JSON.stringify(reqData));
+        this.discardRecording()
+
+        try {
+          let resp = '';
+          resp = await chatbotAPI.requestRecord (mergedRoot + mergedReq.path, formData)
+          if (resp.data != null && resp.data.isError === false && Array.isArray(resp.data.messages)) {
+            for (let i = 0; i < resp.data.messages.length; i++) {
+              this.addMessage(resp.data.messages[i].content, "bot", false)
+            }
+          } else {
+            this.addMessage("Error fetching response", "bot", true)
+          }
+        } catch (error) {
+          this.addMessage("Connection error", "bot", true)
+        }
+
       }
     },
     toggleRecordMode() {

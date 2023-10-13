@@ -58,8 +58,32 @@ function requestGET (path, param) {
   return p
 }
 
+function requestRecord (path, formData) {
+  const p = new Promise((resolve, reject) => {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    const params = {
+      url: path,
+      method: 'POST',
+      data: formData,
+      timeout: {
+        client: 10 * 1000
+      },
+      headers: headers,
+    }
+    axios(params).then(data => {
+      resolve(data)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+  return p
+}
+
 export default {
     requestSearch,
     requestPOST,
-    requestGET
+    requestGET,
+    requestRecord
 }
