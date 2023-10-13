@@ -317,6 +317,7 @@ export default {
         this.isRecording = true;
         this.audioChunks = [];
         this.recordingTime = 0;
+        // this.recordRecognition()
         navigator.mediaDevices
           .getUserMedia({ audio: true })
           .then((stream) => {
@@ -361,11 +362,33 @@ export default {
           audio.play();
         }
       },
+      recordRecognition() {
+        window.SpeechRecognition =
+        window.SpeechRecognition || 
+        window.webkitSpeechRecognition;
+        const recognition = new window.SpeechRecognition();
+
+        recognition.onerror = function(event) {
+          console.error('Speech recognition error: ' + event.error);
+        };
+        recognition.onstart = function() {
+          console.log('Start regonizing...');
+        };
+
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          console.log('Recognition result:', transcript)
+        }
+
+        recognition.start();
+      },
       discardRecording() {
-        this.audioChunks = [];
-        this.audioUrl = '';
-        this.mediaRecorder = null;
-        this.recordingTime = 0;
+        if(!this.audioplaying) {
+          this.audioChunks = [];
+          this.audioUrl = '';
+          this.mediaRecorder = null;
+          this.recordingTime = 0;
+        }
       },
       handleDataAvailable(blob) {
         this.audioChunks.push(blob.data);
@@ -481,7 +504,7 @@ export default {
   .chatArea {
       box-sizing: border-box;
       color: #323233;
-      width: calc(100%-80px);
+      width: calc(100% - 80px);
   }
   .chatArea .contentSpan{
       display: inline-block;
