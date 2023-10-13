@@ -61,7 +61,8 @@
               <button class="circle" @click="record">
                 <div class="mic" v-if="!isRecording && audioUrl==''"></div>
                 <div class="stopRecord" v-if="isRecording"></div>
-                <div class="playRecord" v-if="!isRecording && audioUrl!=''"></div>
+                <div class="playRecord" v-if="!isRecording && audioUrl!='' && !audioplaying"></div>
+                <div class="pauseRecord" v-if="audioplaying"></div>
               </button>
             </div>
             <button class="sendRecord" v-if="!isRecording && audioUrl!=''"></button>
@@ -152,6 +153,7 @@ export default {
       audioUrl: '',
       recordingTime: 0,
       recordingTimer: null,
+      audioplaying: false,
     };
   },
   created() {
@@ -289,7 +291,8 @@ export default {
     record() {
       if(this.isRecording && this.audioUrl == '') {
         this.stopRecording()
-      } else if(!this.isRecording && this.audioUrl != '') {
+      } else if(this.audioplaying) {
+      } else if(!this.isRecording && this.audioUrl != '' ) {
         this.playRecording()
       } else {
         if(this.isMicrophoneReady) {
@@ -339,7 +342,22 @@ export default {
       },
       playRecording() {
         if (this.audioUrl) {
+          this.audioplaying = true
           const audio = new Audio(this.audioUrl);
+
+          const timeupdateHandler = () => {
+            this.recordingTime = Math.floor(audio.currentTime);
+          };
+
+          const endedHandler = () => {
+            this.audioplaying = false
+            audio.removeEventListener('timeupdate', timeupdateHandler);
+            audio.removeEventListener('ended', endedHandler);
+          };
+
+          audio.addEventListener('timeupdate', timeupdateHandler);
+          audio.addEventListener('ended', endedHandler);
+
           audio.play();
         }
       },
@@ -714,6 +732,23 @@ export default {
     background-color: transparent;
     border: 0;
     background-repeat: no-repeat;
+  }
+
+  .dark .playRecord {
+    background-image: url(./assets/mic/playdark.svg);
+  }
+
+  .pauseRecord {
+    background-image: url(./assets/mic/pause.svg);
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 0;
+    background-repeat: no-repeat;
+  }
+
+  .dark .pauseRecord {
+    background-image: url(./assets/mic/pausedark.svg);
   }
 
   .circle {
