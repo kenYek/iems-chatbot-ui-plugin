@@ -32,6 +32,7 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
     <drag-ctrl-chat-dialog :api="api" :msg="msg" class="dark"></drag-ctrl-chat-dialog>
 
     config: {
+        showChatbot: Boolean,
         name: String,
         showName: Boolean,
         mic: Boolean,
@@ -51,7 +52,11 @@ prop 包含 `config`, `api`, `msg` 三個屬性， 以及 light, dark 風格
             params: {
                 resourceId: "984"
             }
-        } // chat 接口 api  
+        }, // chat 接口 api  
+        record: { // 需等ai server實作
+            path: String,
+            params: {}
+        } // 送出錄音訊息 api
     }
 
     msg: {
