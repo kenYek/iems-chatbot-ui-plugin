@@ -541,11 +541,16 @@ export default {
       line-height: 16px;
       font-size: 12px;
       margin: 0px 2px;
+      width: 27px;
   }
   .chatArea {
       box-sizing: border-box;
       color: #323233;
-      width: calc(100% - 80px);
+      /* width: calc(100% - 80px); */
+  }
+
+  aiBotBox .chatArea {
+    width: calc(100% - 80px);
   }
   .chatArea .contentSpan{
       display: inline-block;
@@ -588,21 +593,20 @@ export default {
 
   .contentSpanWithHelp{
     display: inline-block;
-    padding: 10px 12px;
     text-align: left;
   }
 
   .aiBotBox .chatArea .contentSpanWithHelp .contentSpan{
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
-    width:100%;
+    width:calc(100% - 27px);
   }
   .helpArea {
     background-color: #E1E1E1;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
     padding: 10px 12px;
-    width:100%;
+    width:calc(100% - 27px);
     display: flex;
     align-items: center;
     color: #89898A;
