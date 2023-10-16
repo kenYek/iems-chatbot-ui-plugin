@@ -72,8 +72,8 @@ export default {
       dialogTitle: dialogTitle,
       dialogSubTitle: dialogSubTitle,
       btnPosition: {
-        x: '0px',
-        y: '0px'
+        x: window.innerWidth,
+        y: window.innerHeight
       }
     };
   },
