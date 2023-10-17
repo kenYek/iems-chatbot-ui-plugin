@@ -549,7 +549,7 @@ export default {
       /* width: calc(100% - 80px); */
   }
 
-  aiBotBox .chatArea {
+  .aiBotBox .chatArea {
     width: calc(100% - 80px);
   }
   .chatArea .contentSpan{
