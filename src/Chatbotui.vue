@@ -558,6 +558,7 @@ export default {
       border-bottom-left-radius: 20px;
       padding: 10px 12px;
       text-align: left;
+      white-space: pre-line;
   }
   .selfBox .chatArea .contentSpan{
       background-color: #4679E1;
